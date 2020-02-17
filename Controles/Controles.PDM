@@ -1,0 +1,117 @@
+[Root]
+Most Recent Package=Paquete de instalación estándar 1
+
+
+[Package|Paquete de instalación estándar 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\Nuevo Sistema\Controles\Paquete_1
+Controls Design-Time Support=Yes
+
+[Package|Paquete de instalación estándar 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Paquete de instalación estándar 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Paquete de instalación estándar 1|Files Found]
+
+[Package|Paquete de instalación estándar 1|Files Released]
+
+[Package|Paquete de instalación estándar 1|Missing Dependency Information]
+C:\Archivos de programa\VBReFormer\Mscomctl.ocx=
+C:\Archivos de programa\Archivos comunes\Microsoft Shared\MODI\11.0\MDIVWCTL.DLL=
+
+[Package|Paquete de instalación estándar 1|Out-of-Date Dependency Information]
+C:\WINDOWS\system32\MCI32.OCX=
+C:\WINDOWS\system32\Msflxgrd.ocx=
+
+[Package|Paquete de instalación estándar 1|Files Added]
+c:\windows\system32\msstkprp.dll=Este archivo es necesario para compatibilidad en tiempo de diseño con controles de usuario
+
+[Package|Paquete de instalación estándar 1|Files Removed]
+
+[Package|Paquete de instalación estándar 1|Files In Project]
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\VB6ES.DLL=Yes
+C:\WINDOWS\system32\msmask32.ocx=Yes
+C:\WINDOWS\system32\msmskES.dll=Yes
+C:\WINDOWS\system32\Msflxgrd.ocx=Yes
+C:\WINDOWS\system32\FLXGDES.DLL=Yes
+C:\WINDOWS\system32\comctl32.ocx=Yes
+C:\WINDOWS\system32\CMCTLES.DLL=Yes
+C:\WINDOWS\system32\MCI32.OCX=Yes
+C:\WINDOWS\system32\MCIES.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\WINDOWS\system32\msstkprp.dll=Yes
+C:\WINDOWS\system32\MSPRPES.DLL=Yes
+C:\Nuevo Sistema\Controles\Controles.ocx=Yes
+C:\WINDOWS\system32\MSCOMCTL.OCX=Yes
+C:\WINDOWS\system32\MSCMCES.DLL=Yes
+C:\Archivos de programa\Archivos comunes\Microsoft Shared\MODI\11.0\MDIVWCTL.DLL=Yes
+
+[Package|Paquete de instalación estándar 1|Configure Registry Files]
+Applicable=No
+
+[Package|Paquete de instalación estándar 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Paquete de instalación estándar 1|Install Locations]
+C:\Sistema\Nuevo Sistema\Controles\Controles.ocx=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\VB6ES.DLL=$(WinSysPath)
+C:\Archivos de programa\VBReFormer\Mscomctl.ocx=$(WinSysPath)
+C:\WINDOWS\system32\msmask32.ocx=$(WinSysPath)
+C:\WINDOWS\system32\msmskES.dll=$(WinSysPath)
+C:\WINDOWS\system32\Msflxgrd.ocx=$(WinSysPath)
+C:\WINDOWS\system32\FLXGDES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\comctl32.ocx=$(WinSysPath)
+C:\WINDOWS\system32\CMCTLES.DLL=$(WinSysPath)
+C:\WINDOWS\system32\MCI32.OCX=$(WinSysPath)
+C:\WINDOWS\system32\MCIES.DLL=$(WinSysPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\WINDOWS\system32\msstkprp.dll=$(WinSysPath)
+C:\WINDOWS\system32\MSPRPES.DLL=$(WinSysPath)
+C:\Nuevo Sistema\Controles\Controles.ocx=$(AppPath)
+C:\WINDOWS\system32\MSCOMCTL.OCX=$(WinSysPath)
+C:\WINDOWS\system32\MSCMCES.DLL=$(WinSysPath)
+C:\Archivos de programa\Archivos comunes\Microsoft Shared\MODI\11.0\MDIVWCTL.DLL=$(WinSysPath)
+
+[Package|Paquete de instalación estándar 1|Configure Shared Files]
+Applicable=Yes
+C:\Sistema\Nuevo Sistema\Controles\Controles.ocx=No
+C:\Archivos de programa\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=Yes
+C:\Nuevo Sistema\Controles\Controles.ocx=Yes
+
+[Package|Paquete de instalación estándar 1|Distribution]
+Type=single
+Size=
+Title=Controles
+
+[Package|Paquete de instalación estándar 1|Package]
+PackageFolder=C:\Nuevo Sistema\Controles\Paquete_1
+ProjectFolder=C:\Nuevo Sistema\Controles
+ServerSideCab=
+File1=C:\Nuevo Sistema\Controles\Paquete_1\setup.exe
+File2=C:\Nuevo Sistema\Controles\Paquete_1\Setup.Lst
+File3=C:\Nuevo Sistema\Controles\Paquete_1\Controles.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

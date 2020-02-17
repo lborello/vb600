@@ -1,0 +1,44 @@
+[Source Media Descriptions]
+	"1", "ODBC Driver Libraries", "odbc32.dl_", "."
+
+
+[Generic Thunk ODBC]
+"Thunk2" = 1, ds16gt.dll,,,, 1995-03-03,  ,,OLDER,  ,,,,,SHARED, 5024,,,, 2.10.23.23,
+"Thunk1" = 1, ds32gt.dll,,,, 1995-03-03,  ,,OLDER,  ,,,,,SHARED, 4608,,,,,
+
+[Generic Thunk ODBC Driver Manager]
+"Thunk1" = 1, odbc32gt.dll,,,, 1995-03-03,  ,,,  ,,,,,, 7168,,,,,
+"Thunk2" = 1, odbc16gt.dll,,,, 1995-03-03,  ,,OLDER,  ,,,,,, 23440,,,, 2.10.24.1,
+
+[ODBC Drivers]
+"Topspeed ODBC Driver" =
+"Topspeed ODBC Driver (Read-Only)" =
+
+[ODBC]
+"cpanel" = 1, odbccp32.cpl,,,, 1995-03-03,  ,,OLDER,  ,,,,,SHARED, 7168,,,, 2.10.23.23,
+"Help" = 1, odbcinst.hlp,,,, 1995-03-03,  ,,OLDER,  ,,,,,SHARED, 17412,,,,,
+"Main" = 1, odbccp32.dll,,,, 1995-03-03,  ,,OLDER,  ,,,,,SHARED, 98816,,,, 2.10.24.1,
+"WinSysNT01" = 1, msvcrt20.dll,,,, 1995-03-03,  ,,OLDER,  ,,,,,SHARED, 243200,,,, 2.0.0.0,
+
+[ODBC Administrator]
+"Windows00" = 1, odbcad32.exe,,,, 1995-03-03,  ,,OLDER,  ,,,,,, 7168,,,, 2.10.23.23,
+
+[ODBC Driver Manager]
+"WinSysNT00" = 1, ctl3dnt.dll,,,, 1995-03-03,  ,,OLDER,  ,,ctl3d32.dll,,,SHARED, 26624,,,, 2.26.0.0,
+"WinSys9500" = 1, ctl3d95.dll,,,, 1995-03-03,  ,,OLDER,  ,,ctl3d32.dll,,,SHARED, 26112,,,, 2.26.0.0,
+"Driver" = 1, odbc32.dll,,,, 1995-03-03,  ,,OLDER,  ,,,,,SHARED, 65024,,,, 2.10.23.23,
+"CrsrLib" = 1, odbccr32.dll,,,, 1995-03-03,  ,,OLDER,  ,,,,,SHARED, 171008,,,, 2.10.23.23,
+"WinSysNT01" = 1, msvcrt20.dll,,,, 1995-03-03,  ,,OLDER,  ,,,,,SHARED, 243200,,,, 2.0.0.0,
+"MFC" = 1, mfc30.dll,,,, 1995-03-03,  ,,OLDER,  ,,,,,SHARED, 348160,,,, 3.0.0.0,
+
+[Topspeed ODBC Driver]
+"Driver" = 1, c4otsx.dll,,,, 1997-09-20,  ,, OLDER,  ,,,,,, 378880,,,, 2.00.00.00,
+"Setup" = 1, c4otsx.dll,,,, 1997-09-20,  ,, OLDER,  ,,,,,, 378880,,,, 2.00.00.00,
+"Sort" = 1, otsw32.dll,,,, 1994-09-28,  ,, OLDER,  ,,,,,, 69632,,,, ,
+"Help" = 1, tpsodbc.hlp,,,, 1997-10-08,  ,,,  ,,,,,, 391411,,,,,
+
+[Topspeed ODBC Driver (Read-Only)]
+"Driver" = 1, c4otrx.dll,,,, 1997-09-20,  ,, OLDER,  ,,,,,, 374272,,,, 2.00.00.00,
+"Setup" = 1, c4otrx.dll,,,, 1997-09-20,  ,, OLDER,  ,,,,,, 374272,,,, 2.00.00.00,
+"Sort" = 1, otsw32.dll,,,, 1994-09-28,  ,, OLDER,  ,,,,,, 69632,,,, ,
+"Help" = 1, tpsodbc.hlp,,,, 1997-10-08,  ,,,  ,,,,,, 391411,,,,,
