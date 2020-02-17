@@ -1,1 +1,9 @@
+<<<<<<< HEAD
  liois
+=======
+<<<<<<< HEAD
+dddwwwjjj
+=======
+dddwww
+>>>>>>> c8d0c493ea2657e005725bb46f1a062a7be8345a
+>>>>>>> 1d2ece7fe1b67527b168123b0ba2be7a0b1db88a
