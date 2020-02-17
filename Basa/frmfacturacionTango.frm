@@ -37,10 +37,10 @@ Begin VB.Form frmfacturacionTango
       TabCaption(0)   =   "Parametros"
       TabPicture(0)   =   "frmfacturacionTango.frx":0000
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "Frame8"
-      Tab(0).Control(1)=   "Frame5"
-      Tab(0).Control(2)=   "Frame4"
-      Tab(0).Control(3)=   "Frame3"
+      Tab(0).Control(0)=   "Frame3"
+      Tab(0).Control(1)=   "Frame4"
+      Tab(0).Control(2)=   "Frame5"
+      Tab(0).Control(3)=   "Frame8"
       Tab(0).ControlCount=   4
       TabCaption(1)   =   "Facturación"
       TabPicture(1)   =   "frmfacturacionTango.frx":001C
@@ -87,34 +87,34 @@ Begin VB.Form frmfacturacionTango
       TabCaption(2)   =   "Fletes"
       TabPicture(2)   =   "frmfacturacionTango.frx":0038
       Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "chkSoloPendientes"
-      Tab(2).Control(1)=   "txtFechaFlete"
+      Tab(2).Control(0)=   "Label25"
+      Tab(2).Control(1)=   "grdFletes"
       Tab(2).Control(2)=   "cmdActualizarFletes"
-      Tab(2).Control(3)=   "grdFletes"
-      Tab(2).Control(4)=   "Label25"
+      Tab(2).Control(3)=   "txtFechaFlete"
+      Tab(2).Control(4)=   "chkSoloPendientes"
       Tab(2).ControlCount=   5
       TabCaption(3)   =   "Recibos"
       TabPicture(3)   =   "frmfacturacionTango.frx":0054
       Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "cmdAceptarRecibo"
-      Tab(3).Control(1)=   "Frame7"
-      Tab(3).Control(2)=   "grdReciboFacuta"
-      Tab(3).Control(3)=   "Frame6"
-      Tab(3).Control(4)=   "Label40"
-      Tab(3).Control(5)=   "lblReciboTotalFacturas"
+      Tab(3).Control(0)=   "lblReciboTotalFacturas"
+      Tab(3).Control(1)=   "Label40"
+      Tab(3).Control(2)=   "Frame6"
+      Tab(3).Control(3)=   "grdReciboFacuta"
+      Tab(3).Control(4)=   "Frame7"
+      Tab(3).Control(5)=   "cmdAceptarRecibo"
       Tab(3).ControlCount=   6
       TabCaption(4)   =   "facturasDatas"
       TabPicture(4)   =   "frmfacturacionTango.frx":0070
       Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "cmdActualizarCliente"
-      Tab(4).Control(1)=   "chkPasarTodas"
-      Tab(4).Control(2)=   "txtFechaDatas"
-      Tab(4).Control(3)=   "txtClienteCustodia"
+      Tab(4).Control(0)=   "Label61"
+      Tab(4).Control(1)=   "Label62"
+      Tab(4).Control(2)=   "grdFacturaCustodia"
+      Tab(4).Control(3)=   "cmdFacturacionCustodia"
       Tab(4).Control(4)=   "Command45"
-      Tab(4).Control(5)=   "cmdFacturacionCustodia"
-      Tab(4).Control(6)=   "grdFacturaCustodia"
-      Tab(4).Control(7)=   "Label62"
-      Tab(4).Control(8)=   "Label61"
+      Tab(4).Control(5)=   "txtClienteCustodia"
+      Tab(4).Control(6)=   "txtFechaDatas"
+      Tab(4).Control(7)=   "chkPasarTodas"
+      Tab(4).Control(8)=   "cmdActualizarCliente"
       Tab(4).ControlCount=   9
       Begin VB.CommandButton cmdActualizarCliente 
          Caption         =   "Actualizar Cliente"
@@ -8282,173 +8282,173 @@ Public Function Control_Requerimientos_Digitales() As Boolean
 Public Sub ActualizarTangoDetalle(COD_ARTICU As String, COD_CLIENTE As Integer, Cantidad As Long, Base As String)
     
     
-    Dim ConInternaTango As New ADODB.Connection
-    Dim rsBasa As New ADODB.Recordset
-    Dim rsCabezaModelo As New ADODB.Recordset
-    Dim rsDetalleModelo As New ADODB.Recordset
-    Dim Sql As String
-    Dim SqlBasa As String
-    Dim ConTango As New Connection
-    Dim StrConInterna As String
-    Dim Leyenda1 As String
-    
-    
-            SqlBasa = "SELECT  FACTURACION_TANGO.ID, FACTURACION_TANGO.ID_PROCESO, FACTURACION_TANGO.TITULO, FACTURACION_TANGO.GRUPO, FACTURACION_TANGO.COD_CLIENTE, FACTURACION_TANGO.STA11_COD_ARTICU,"
-            SqlBasa = SqlBasa & vbCrLf & " FACTURACION_TANGO.STA11_DESCRIPCIO , FACTURACION_TANGO.Cantidad, Clientes.RAZON_SOCIAL, Clientes.CLIENTE_BASE_TANGO"
-            SqlBasa = SqlBasa & vbCrLf & " FROM FACTURACION_TANGO INNER JOIN CLIENTES ON FACTURACION_TANGO.COD_CLIENTE = CLIENTES.ID_CLIENTE"
-            SqlBasa = SqlBasa & vbCrLf & " WHERE  FACTURACION_TANGO.GRUPO = 1 "
-            SqlBasa = SqlBasa & vbCrLf & " AND FACTURACION_TANGO.ID_PROCESO = N'180515_10:40:05'"
-            SqlBasa = SqlBasa & vbCrLf & " ORDER BY FACTURACION_TANGO.COD_CLIENTE, FACTURACION_TANGO.ID"
-            Leyenda1 = InputBox("Ingrese la leyenda 1", "Mes de Facturacion")
-            Set rsBasa = New ADODB.Recordset
-            
-            
-            rsBasa.Open SqlBasa, strConBasa
-
-            Do While Not rsBasa.EOF
-            StrConInterna = ""
-                If rsBasa!CLIENTE_BASE_TANGO = "Basa" Then
-                    StrConInterna = strConTangoBasa
-                End If
-                If rsBasa!CLIENTE_BASE_TANGO = "Custodia" Then
-                    StrConInterna = strConTangoCustodia
-                End If
-                Set ConInternaTango = New ADODB.Connection
-                ConInternaTango.Open StrConInterna
-                
-                        Sql = "  SELECT ID_GVA48, COD_MODELO, COND_VTA, LEYENDA_1, LEYENDA_5 "
-                        Sql = Sql & " From GVA48 "
-                        Sql = Sql & " WHERE (COD_MODELO BETWEEN 100000 AND 200000) "
-                        Sql = Sql & " AND Where SUBSTRING(COD_MODELO, 2, 4) = " & rsBasa!COD_CLIENTE
-                        Set rsCabezaModelo = New ADODB.Recordset
-                        rsCabezaModelo.Open Sql, StrConInterna
-                        ConTango.Open StrConInterna
-                            While Not rsCabezaModelo.EOF
-                                Sql = " Update GVA48"
-                                Sql = Sql & "  SET  "
-                                Sql = Sql & " LEYENDA_1 ='" & Leyenda1 & "'"
-                                Sql = Sql & " LEYENDA_5 ='Proceso:' " & rsBasa!ID_Proceso & "'"
-                                Sql = Sql & " WHERE (COD_MODELO = '" & rsCabezaModelo!COD_MODELO & "')"
-                                
-                                
-                                Select Case COD_ARTICU
-                                Case "00010"
-                                    Sql = " SELECT CANT_A_DES, CANT_A_FAC, CANT_PEDID, "
-                                    Sql = Sql & " COD_ARTICU , COD_CLIENT, COD_MODELO, N_RENGLON"
-                                    Sql = Sql & " From GVA50"
-                                    Sql = Sql & " WHERE COD_MODELO = " & rsCabezaModelo!COD_MODELO
-                                    Sql = Sql & " AND (COD_ARTICU = '00010' OR COD_ARTICU ='00015')"
-                                    Sql = Sql & " ORDER BY  COD_ARTICU"
-                                    rsDetalleModelo.Open
-                                        Do While Not rsDetalleModelo.EOF
-                                            If rsDetalleModelo!COD_ARTICU = "00010" Then
-                                                If CInt(rsDetalleModelo!CANT_A_FAC) <> 1 Then
-                                                'Actualizar Modelo Detalle
-                                                Sql = " Update GVA50"
-                                                Sql = Sql & " SET CANT_A_FAC =" & Cantidad
-                                                Sql = Sql & " WHERE (COD_ARTICU = '00010')"
-                                                Sql = Sql & " AND (COD_MODELO = '" & rsCabezaModelo!COD_MODELO & "')"
-                                                Rem  ConInternaTango.Execute Sql
-                                                End If
-                                            End If
-                                            'Actualizar Modelo Cabezera
-                                            If rsDetalleModelo!COD_ARTICU = "00015" Then
-                                                Sql = " Update GVA48"
-                                                Sql = Sql & "  SET  "
-                                                Sql = Sql & " LEYENDA_4 ='" & "CANTIDAD DE CAJAS: " & Cantidad & "'"
-                                                Sql = Sql & " WHERE (COD_MODELO = '" & rsCabezaModelo!COD_MODELO & "')"
-                                                Rem ConInternaTango.Execute Sql
-                                            End If
-                                            rsDetalleModelo.MoveNext
-                                        Loop
-                                 Case Else
-                                                Sql = " Update GVA50"
-                                                Sql = Sql & " SET CANT_A_FAC =" & Cantidad
-                                                Sql = Sql & " WHERE (COD_ARTICU = '" & COD_ARTICU & "')"
-                                                Sql = Sql & " AND (COD_MODELO = '" & rsCabezaModelo!COD_MODELO & "')"
-                                                Rem  ConInternaTango.Execute Sql
-                                End Select
-                            
-                            rsCabezaModelo.MoveNext
-                        Loop
-
-                
-                
-                
-                
-                
-                
-                
-                
-                rsBasa.MoveNext
-            Loop
-            
-            
-
-
-
-
-            
-'SELECT        MODELO_CABECERA.ID_GVA48 AS ID_MODELO, CONVERT(int, SUBSTRING(MODELO_CABECERA.COD_MODELO, 2, 4)) AS COD_CLIENTE, MODELO_CABECERA.COD_MODELO,
-'                         MODELO_CABECERA.DESC_MODEL AS RAZON_SOCIAL_MODELO, MODELO_CABECERA.LEYENDA_1, MODELO_CABECERA.LEYENDA_5, MODELO_DETALLE.ID_GVA50 AS ID_MODELO_DETALLE,
-'                         MODELO_DETALLE.COD_ARTICU , MODELO_DETALLE.CANT_A_DES, MODELO_DETALLE.CANT_A_FAC, MODELO_DETALLE.CANT_PEDID
-'FROM            GVA48 AS MODELO_CABECERA LEFT OUTER JOIN
-'                         GVA50 AS MODELO_DETALLE ON MODELO_CABECERA.COD_MODELO = MODELO_DETALLE.COD_MODELO
-'
-''conTango.Open strConTango
-'
-'Sql = " SELECT   ID_GVA50, CANT_A_DES, COD_MODELO, COD_ARTICU, CANT_PEDID, CANT_A_FAC, SUBSTRING(COD_MODELO, 2, 4) AS COD_CLIENTE_BASA"
-'Sql = Sql & " From CUSTODIA_DE_ARCHIVOS_MENDOZA_SRL.dbo.GVA50"
-'Sql = Sql & "  WHERE        (SUBSTRING(COD_MODELO, 1, 1) = 1) "
-'Sql = Sql & " AND SUBSTRING(COD_MODELO, 2, 4) = " & COD_CLIENTE
-'Sql = Sql & " AND (COD_ARTICU = '" & COD_ARTICU & "')"
-'rs.Open Sql, conTango
-'If Not rs.EOF Then
-'
-' MsgBox rs!CANT_A_FAC & " cliente: " & COD_CLIENTE
+'    Dim ConInternaTango As New ADODB.Connection
+'    Dim rsBasa As New ADODB.Recordset
+'    Dim rsCabezaModelo As New ADODB.Recordset
+'    Dim rsDetalleModelo As New ADODB.Recordset
+'    Dim Sql As String
+'    Dim SqlBasa As String
+'    Dim ConTango As New Connection
+'    Dim StrConInterna As String
+'    Dim Leyenda1 As String
 '
 '
-'End If
+'            SqlBasa = "SELECT  FACTURACION_TANGO.ID, FACTURACION_TANGO.ID_PROCESO, FACTURACION_TANGO.TITULO, FACTURACION_TANGO.GRUPO, FACTURACION_TANGO.COD_CLIENTE, FACTURACION_TANGO.STA11_COD_ARTICU,"
+'            SqlBasa = SqlBasa & vbCrLf & " FACTURACION_TANGO.STA11_DESCRIPCIO , FACTURACION_TANGO.Cantidad, Clientes.RAZON_SOCIAL, Clientes.CLIENTE_BASE_TANGO"
+'            SqlBasa = SqlBasa & vbCrLf & " FROM FACTURACION_TANGO INNER JOIN CLIENTES ON FACTURACION_TANGO.COD_CLIENTE = CLIENTES.ID_CLIENTE"
+'            SqlBasa = SqlBasa & vbCrLf & " WHERE  FACTURACION_TANGO.GRUPO = 1 "
+'            SqlBasa = SqlBasa & vbCrLf & " AND FACTURACION_TANGO.ID_PROCESO = N'180515_10:40:05'"
+'            SqlBasa = SqlBasa & vbCrLf & " ORDER BY FACTURACION_TANGO.COD_CLIENTE, FACTURACION_TANGO.ID"
+'            Leyenda1 = InputBox("Ingrese la leyenda 1", "Mes de Facturacion")
+'            Set rsBasa = New ADODB.Recordset
 '
-
-
-Rem modelo cabezera
-'Sql = " Update GVA48"
-'Sql = Sql & "  SET  "
-'Sql = Sql & " LEYENDA_1 ='" & "mesde asgo" & "'"
-'Sql = Sql & " , LEYENDA_5 ='" & ID_Proceso & "'"
-'Sql = Sql & "  Where SUBSTRING(COD_MODELO, 2, 4) = " & COD_CLIENTE
-
-
-
-
-
-
-'/****** Script for SelectTopNRows command from SSMS  ******/
-'SELECT        ID_GVA48, COD_MODELO, COND_VTA, LEYENDA_1, LEYENDA_5
-'From GVA48
-'WHERE        (COD_MODELO BETWEEN 100000 AND 200000)
-AND Where SUBSTRING(COD_MODELO, 2, 4) = " & COD_CLIENTE
 '
-' COD_MODELO BETWEEN 100000 AND 200000)
+'            rsBasa.Open SqlBasa, strConBasa
 '
- 
- 
- 
-    Rem detalle MOdelo
-    ' en el detalle modelo la CANT_PEDID es a los efectos que apacesca el la lista de precios
-    ' Lo que tengo que modificar es CANT_A_FAC
-
-
- 
- /****** Script for SelectTopNRows command from SSMS  ******/
-SELECT        CANT_A_DES, CANT_A_FAC, CANT_PEDID, COD_ARTICU, COD_CLIENT, COD_MODELO, N_RENGLON
-From GVA50
-ORDER BY COD_MODELO
- 
- 
- 
-'conTango.Execute Sql
+'            Do While Not rsBasa.EOF
+'            StrConInterna = ""
+'                If rsBasa!CLIENTE_BASE_TANGO = "Basa" Then
+'                    StrConInterna = strConTangoBasa
+'                End If
+'                If rsBasa!CLIENTE_BASE_TANGO = "Custodia" Then
+'                    StrConInterna = strConTangoCustodia
+'                End If
+'                Set ConInternaTango = New ADODB.Connection
+'                ConInternaTango.Open StrConInterna
+'
+'                        Sql = "  SELECT ID_GVA48, COD_MODELO, COND_VTA, LEYENDA_1, LEYENDA_5 "
+'                        Sql = Sql & " From GVA48 "
+'                        Sql = Sql & " WHERE (COD_MODELO BETWEEN 100000 AND 200000) "
+'                        Sql = Sql & " AND Where SUBSTRING(COD_MODELO, 2, 4) = " & rsBasa!COD_CLIENTE
+'                        Set rsCabezaModelo = New ADODB.Recordset
+'                        rsCabezaModelo.Open Sql, StrConInterna
+'                        ConTango.Open StrConInterna
+'                            While Not rsCabezaModelo.EOF
+'                                Sql = " Update GVA48"
+'                                Sql = Sql & "  SET  "
+'                                Sql = Sql & " LEYENDA_1 ='" & Leyenda1 & "'"
+'                                Sql = Sql & " LEYENDA_5 ='Proceso:' " & rsBasa!ID_Proceso & "'"
+'                                Sql = Sql & " WHERE (COD_MODELO = '" & rsCabezaModelo!COD_MODELO & "')"
+'
+'
+'                                Select Case COD_ARTICU
+'                                Case "00010"
+'                                    Sql = " SELECT CANT_A_DES, CANT_A_FAC, CANT_PEDID, "
+'                                    Sql = Sql & " COD_ARTICU , COD_CLIENT, COD_MODELO, N_RENGLON"
+'                                    Sql = Sql & " From GVA50"
+'                                    Sql = Sql & " WHERE COD_MODELO = " & rsCabezaModelo!COD_MODELO
+'                                    Sql = Sql & " AND (COD_ARTICU = '00010' OR COD_ARTICU ='00015')"
+'                                    Sql = Sql & " ORDER BY  COD_ARTICU"
+'                                    rsDetalleModelo.Open
+'                                        Do While Not rsDetalleModelo.EOF
+'                                            If rsDetalleModelo!COD_ARTICU = "00010" Then
+'                                                If CInt(rsDetalleModelo!CANT_A_FAC) <> 1 Then
+'                                                'Actualizar Modelo Detalle
+'                                                Sql = " Update GVA50"
+'                                                Sql = Sql & " SET CANT_A_FAC =" & Cantidad
+'                                                Sql = Sql & " WHERE (COD_ARTICU = '00010')"
+'                                                Sql = Sql & " AND (COD_MODELO = '" & rsCabezaModelo!COD_MODELO & "')"
+'                                                Rem  ConInternaTango.Execute Sql
+'                                                End If
+'                                            End If
+'                                            'Actualizar Modelo Cabezera
+'                                            If rsDetalleModelo!COD_ARTICU = "00015" Then
+'                                                Sql = " Update GVA48"
+'                                                Sql = Sql & "  SET  "
+'                                                Sql = Sql & " LEYENDA_4 ='" & "CANTIDAD DE CAJAS: " & Cantidad & "'"
+'                                                Sql = Sql & " WHERE (COD_MODELO = '" & rsCabezaModelo!COD_MODELO & "')"
+'                                                Rem ConInternaTango.Execute Sql
+'                                            End If
+'                                            rsDetalleModelo.MoveNext
+'                                        Loop
+'                                 Case Else
+'                                                Sql = " Update GVA50"
+'                                                Sql = Sql & " SET CANT_A_FAC =" & Cantidad
+'                                                Sql = Sql & " WHERE (COD_ARTICU = '" & COD_ARTICU & "')"
+'                                                Sql = Sql & " AND (COD_MODELO = '" & rsCabezaModelo!COD_MODELO & "')"
+'                                                Rem  ConInternaTango.Execute Sql
+'                                End Select
+'
+'                            rsCabezaModelo.MoveNext
+'                        Loop
+'
+'
+'
+'
+'
+'
+'
+'
+'
+'                rsBasa.MoveNext
+'            Loop
+'
+'
+'
+'
+'
+'
+'
+''SELECT        MODELO_CABECERA.ID_GVA48 AS ID_MODELO, CONVERT(int, SUBSTRING(MODELO_CABECERA.COD_MODELO, 2, 4)) AS COD_CLIENTE, MODELO_CABECERA.COD_MODELO,
+''                         MODELO_CABECERA.DESC_MODEL AS RAZON_SOCIAL_MODELO, MODELO_CABECERA.LEYENDA_1, MODELO_CABECERA.LEYENDA_5, MODELO_DETALLE.ID_GVA50 AS ID_MODELO_DETALLE,
+''                         MODELO_DETALLE.COD_ARTICU , MODELO_DETALLE.CANT_A_DES, MODELO_DETALLE.CANT_A_FAC, MODELO_DETALLE.CANT_PEDID
+''FROM            GVA48 AS MODELO_CABECERA LEFT OUTER JOIN
+''                         GVA50 AS MODELO_DETALLE ON MODELO_CABECERA.COD_MODELO = MODELO_DETALLE.COD_MODELO
+''
+'''conTango.Open strConTango
+''
+''Sql = " SELECT   ID_GVA50, CANT_A_DES, COD_MODELO, COD_ARTICU, CANT_PEDID, CANT_A_FAC, SUBSTRING(COD_MODELO, 2, 4) AS COD_CLIENTE_BASA"
+''Sql = Sql & " From CUSTODIA_DE_ARCHIVOS_MENDOZA_SRL.dbo.GVA50"
+''Sql = Sql & "  WHERE        (SUBSTRING(COD_MODELO, 1, 1) = 1) "
+''Sql = Sql & " AND SUBSTRING(COD_MODELO, 2, 4) = " & COD_CLIENTE
+''Sql = Sql & " AND (COD_ARTICU = '" & COD_ARTICU & "')"
+''rs.Open Sql, conTango
+''If Not rs.EOF Then
+''
+'' MsgBox rs!CANT_A_FAC & " cliente: " & COD_CLIENTE
+''
+''
+''End If
+''
+'
+'
+'Rem modelo cabezera
+''Sql = " Update GVA48"
+''Sql = Sql & "  SET  "
+''Sql = Sql & " LEYENDA_1 ='" & "mesde asgo" & "'"
+''Sql = Sql & " , LEYENDA_5 ='" & ID_Proceso & "'"
+''Sql = Sql & "  Where SUBSTRING(COD_MODELO, 2, 4) = " & COD_CLIENTE
+'
+'
+'
+'
+'
+'
+''/****** Script for SelectTopNRows command from SSMS  ******/
+''SELECT        ID_GVA48, COD_MODELO, COND_VTA, LEYENDA_1, LEYENDA_5
+''From GVA48
+''WHERE        (COD_MODELO BETWEEN 100000 AND 200000)
+'AND Where SUBSTRING(COD_MODELO, 2, 4) = " & COD_CLIENTE
+''
+'' COD_MODELO BETWEEN 100000 AND 200000)
+''
+'
+'
+'
+'    Rem detalle MOdelo
+'    ' en el detalle modelo la CANT_PEDID es a los efectos que apacesca el la lista de precios
+'    ' Lo que tengo que modificar es CANT_A_FAC
+'
+'
+'
+' /****** Script for SelectTopNRows command from SSMS  ******/
+'SELECT        CANT_A_DES, CANT_A_FAC, CANT_PEDID, COD_ARTICU, COD_CLIENT, COD_MODELO, N_RENGLON
+'From GVA50
+'ORDER BY COD_MODELO
+'
+'
+'
+''conTango.Execute Sql
 End Sub
 
 Public Sub LimpiarTablasCabezaModeloTango()

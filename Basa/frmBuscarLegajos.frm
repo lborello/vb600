@@ -25,7 +25,6 @@ Begin VB.Form frmBuscarLegajos
       _ExtentY        =   16854
       _Version        =   393216
       Tabs            =   5
-      Tab             =   1
       TabsPerRow      =   2
       TabHeight       =   520
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -39,7 +38,7 @@ Begin VB.Form frmBuscarLegajos
       EndProperty
       TabCaption(0)   =   "Buscar Legajos"
       TabPicture(0)   =   "frmBuscarLegajos.frx":0000
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "ctlIndiceLegajo"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Frame1"
@@ -51,13 +50,10 @@ Begin VB.Form frmBuscarLegajos
       Tab(0).ControlCount=   4
       TabCaption(1)   =   "Rearchivo"
       TabPicture(1)   =   "frmBuscarLegajos.frx":001C
-      Tab(1).ControlEnabled=   -1  'True
-      Tab(1).Control(0)=   "fraOrdenLegajos"
-      Tab(1).Control(0).Enabled=   0   'False
+      Tab(1).ControlEnabled=   0   'False
+      Tab(1).Control(0)=   "cmdCopiarExcel"
       Tab(1).Control(1)=   "grdRearchivo"
-      Tab(1).Control(1).Enabled=   0   'False
-      Tab(1).Control(2)=   "cmdCopiarExcel"
-      Tab(1).Control(2).Enabled=   0   'False
+      Tab(1).Control(2)=   "fraOrdenLegajos"
       Tab(1).ControlCount=   3
       TabCaption(2)   =   "Rearchivo Digital"
       TabPicture(2)   =   "frmBuscarLegajos.frx":0038
@@ -97,7 +93,7 @@ Begin VB.Form frmBuscarLegajos
       End
       Begin VB.Frame Frame2 
          Height          =   1515
-         Left            =   -74820
+         Left            =   180
          TabIndex        =   23
          Top             =   1020
          Width           =   2715
@@ -289,7 +285,7 @@ Begin VB.Form frmBuscarLegajos
       End
       Begin VB.Frame Frame3 
          Height          =   1515
-         Left            =   -72000
+         Left            =   3000
          TabIndex        =   26
          Top             =   1020
          Width           =   9615
@@ -641,14 +637,14 @@ Begin VB.Form frmBuscarLegajos
             Strikethrough   =   0   'False
          EndProperty
          Height          =   330
-         Left            =   7260
+         Left            =   -67740
          TabIndex        =   14
          Top             =   8400
          Width           =   2760
       End
       Begin MSDataGridLib.DataGrid grdRearchivo 
          Height          =   3615
-         Left            =   1080
+         Left            =   -73920
          TabIndex        =   13
          Top             =   3840
          Width           =   10575
@@ -712,7 +708,7 @@ Begin VB.Form frmBuscarLegajos
       End
       Begin VB.Frame Frame1 
          Height          =   6855
-         Left            =   -72000
+         Left            =   3000
          TabIndex        =   12
          Top             =   2580
          Width           =   9795
@@ -1025,7 +1021,7 @@ Begin VB.Form frmBuscarLegajos
       End
       Begin VB.Frame fraOrdenLegajos 
          Height          =   2415
-         Left            =   1080
+         Left            =   -73920
          TabIndex        =   1
          Top             =   1080
          Width           =   10575
@@ -1321,7 +1317,7 @@ Begin VB.Form frmBuscarLegajos
       End
       Begin Controles.cltIndice ctlIndiceLegajo 
          Height          =   6795
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   36
          Top             =   2640
          Width           =   2775
@@ -1442,7 +1438,11 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
- Dim rsLegajos As ADODB.Recordset
+ Dim rslegajos As ADODB.Recordset
+
+Public Sub BuscarLegajosRearchivo2(COD_CLIENTE As Integer, ID_CLIENTE_LEGAJO As Long)
+
+End Sub
 
 Private Sub cboBuscar_Change()
    
@@ -1512,202 +1512,208 @@ ErrorCap:
 End Sub
 
 Private Sub cmdBuscar_Click()
+
+BuscarLegajosRearchivo ctlCliente.Valor, txtBuscarLegajo.Text
+
+
     
-On Error GoTo salir
-    Set rsLegajos = New ADODB.Recordset
-    rsLegajos.CursorLocation = adUseClient
-    Dim Sql As String
-    Dim Filtro As String
-    Dim detalle As String
-    Dim Año As String
-    
-    If cboCampo.Text = "" Then
-        MsgBox "Ingrese el Campo ", vbInformation
-        Exit Sub
-    End If
-    
-    If IsNull(ctlCliente.Valor) Then
-        MsgBox "Ingrese el Cliente ", vbInformation
-        Exit Sub
-    End If
-    txtBuscarLegajo = Replace(txtBuscarLegajo, vbCrLf, "")
-    
-    If Mid(txtBuscarLegajo.Text, Len(txtBuscarLegajo.Text)) = "," Then
-        txtBuscarLegajo.Text = Mid(txtBuscarLegajo.Text, 1, Len(txtBuscarLegajo.Text) - 1)
-    End If
-
-    Sql = " SELECT  INDICES.DESCRIPCION, LEGAJOS.ID_CLIENTE_LEGAJO, LEGAJOS.CLIENTE_LEGAJO , DESCRIPCION_REMITO , LEGAJOS.NRO_CAJA, LEGAJOS.COD_ESTADO ,NOMBRE  "
-    Sql = Sql & vbCrLf & " FROM LEGAJOS LEFT OUTER JOIN"
-    Sql = Sql & vbCrLf & " INDICES ON LEGAJOS.COD_CLIENTE = INDICES.COD_CLIENTE AND LEGAJOS.COD_INDICE = INDICES.INDICE"
-    Sql = Sql & vbCrLf & " where LEGAJOS.COD_CLIENTE = " & ctlCliente.Valor & " And "
-    If lblIndice.Caption <> "" Then
-         Sql = Sql & vbCrLf & " COD_INDICE like '" & lblIndice.Caption & "%' AND "
-    End If
-    
-    Select Case cboCampo.Text
-        Case "ID_CLIENTE_LEGAJO"
-            Filtro = " ID_CLIENTE_LEGAJO IN (" & txtBuscarLegajo & ")"
-        Case "CLIENTE_LEGAJO_LETRA"
-            Filtro = " CLIENTE_LEGAJO like '%" & txtBuscarLegajo & "%'"
-        Case "CLIENTE_LEGAJO_NUMERO"
-             Filtro = " NUMERO_LEGAJO_CLIENTE IN (" & txtBuscarLegajo & ")"
-        Case "NOMBRE"
-             Filtro = " NOMBRE like '%" & txtBuscarLegajo & "%'"
-        Case "DESCRIPCION"
-            Filtro = " DESCRIPCION like '%" & txtBuscarLegajo & "%'"
-    End Select
-      
-    TitulosBuscar
-    Sql = Sql & Filtro
-        rsLegajos.Open Sql, ConActiva, 0, 1
-   
-
-
-    Do While Not rsLegajos.EOF
-        grdResultadoBusqueda.AddItem vbTab & "Legajos" & vbTab & rsLegajos!Descripcion & vbTab & rsLegajos!ID_CLIENTE_LEGAJO & vbTab & Trim(rsLegajos!CLIENTE_LEGAJO & "  " & Replace(rsLegajos!DESCRIPCION_REMITO, Chr(9), "")) & vbTab & rsLegajos!Cod_Estado & vbTab & rsLegajos!NRO_CAJA & vbTab & rsLegajos!Nombre
-    
-        rsLegajos.MoveNext
-    Loop
-    
-    If cboCampo.Text = "ID_CLIENTE_LEGAJO" Then
-        Exit Sub
-    End If
-    
-    ' Referencia
-
-If chkReferencias.value = 1 Then
-    If lblIndice.Caption <> "" Then
-        
-        
-        
-        Sql = " SELECT COD_CLIENTE, NRO_CAJA, NRO_DESDE, NRO_HASTA,FECHA_DESDE, INDICE "
-        Sql = Sql & vbCrLf & " From REFERENCIAS "
-        Sql = Sql & vbCrLf & " WHERE  COD_CLIENTE= " & ctlCliente.Valor & " And "
-                
-        If lblIndice.Caption <> "" Then
-             Sql = Sql & vbCrLf & " INDICE like '" & lblIndice.Caption & "%' AND "
-        End If
-        If IsNumeric(txtBuscarLegajo.Text) Then
-            Sql = Sql & vbCrLf & txtBuscarLegajo & "  BETWEEN NRO_DESDE AND NRO_HASTA "
-                
-               If chkSolicitarAño.value = 1 Then
-                   Año = InputBox("Ingrese el año de 4 cifras")
-                    Sql = Sql & vbCrLf & " AND  Year(FECHA_DESDE) = " & Año
-               End If
-               
-                
-                Set rsLegajos = New ADODB.Recordset
-                rsLegajos.Open Sql, ConActiva, 0, 1
-                Do While Not rsLegajos.EOF
-                
-                If IsNull(rsLegajos!FECHA_DESDE) Then
-                    detalle = " Nro_desde: " & rsLegajos!NRO_DESDE & "   Nro_hasta:" & rsLegajos!NRO_HASTA
-                Else
-                    detalle = " Nro_desde: " & rsLegajos!NRO_DESDE & "   Nro_hasta:" & rsLegajos!NRO_HASTA & "  AÑO:" & Format(rsLegajos!FECHA_DESDE, "YY")
-                End If
-                
-                grdResultadoBusqueda.AddItem vbTab & "Referencias" & vbTab & detalle & vbTab & rsLegajos!NRO_CAJA & vbTab & txtBuscarLegajo & vbTab & "rslegajos!Cod_Estado" & vbTab & rsLegajos!NRO_CAJA
-                rsLegajos.MoveNext
-                Loop
-         Else
-            MsgBox "No se realizo la busqueda en referencia puesto que no numerico "
-         End If
-          Else
-            MsgBox "No se realizo la busqueda en referencia puesto que se asigno un incice "
-        End If
-        
-        
-End If
-
-
-
-
-   Rem  ----------- orde de documentacion ----------
-
-If chkRearchivoLote.value = 1 Then
-        
-        
- 
-                If cboCampo.Text = "CLIENTE_LEGAJO_LETRA" Then
-                
-                
-        Sql = " SELECT COD_DOCUMENTACION, ORDENAR_DOCUMENTACION_DETALLE.ELEMENTO, ORDENAR_DOCUMENTACION_DETALLE.COD_INDICE,"
-        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE, ORDENAR_DOCUMENTACION_DETALLE.COD_ESTADO,"
-        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.CONTENEDOR_PROV, INDICES.DESCRIPCION,"
-        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.Cod_Nro_Caja, Orden"
-        Sql = Sql & " FROM  ORDENAR_DOCUMENTACION_DETALLE LEFT OUTER JOIN"
-        Sql = Sql & " INDICES ON ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE = INDICES.COD_CLIENTE AND"
-        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.Cod_Indice = INDICES.Indice"
-        Sql = Sql & " WHERE  ORDENAR_DOCUMENTACION_DETALLE.ELEMENTO like '%" & txtBuscarLegajo & "%'"
-        Sql = Sql & " AND ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE =" & ctlCliente.Valor
-        
-        
-      Else
-         Sql = " SELECT COD_DOCUMENTACION, ORDENAR_DOCUMENTACION_DETALLE.ELEMENTO, ORDENAR_DOCUMENTACION_DETALLE.COD_INDICE,"
-        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE, ORDENAR_DOCUMENTACION_DETALLE.COD_ESTADO,"
-        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.CONTENEDOR_PROV, INDICES.DESCRIPCION,"
-        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.Cod_Nro_Caja , ORDEN"
-        Sql = Sql & " FROM  ORDENAR_DOCUMENTACION_DETALLE LEFT OUTER JOIN"
-        Sql = Sql & " INDICES ON ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE = INDICES.COD_CLIENTE AND"
-        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.Cod_Indice = INDICES.Indice"
-        Sql = Sql & " WHERE  ORDENAR_DOCUMENTACION_DETALLE.ELEMENTO_NUMERO in ( " & Trim(txtBuscarLegajo.Text) & ")"
-        Sql = Sql & " AND ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE =" & ctlCliente.Valor
-      
-      
-      End If
-      
-        
-        Set rsLegajos = New ADODB.Recordset
-        rsLegajos.Open Sql, ConActiva, 0, 1
-        Do While Not rsLegajos.EOF
-            grdResultadoBusqueda.AddItem vbTab & "Orden Documentacion" & vbTab & rsLegajos!Descripcion & vbTab & rsLegajos!COD_DOCUMENTACION & vbTab & rsLegajos!Elemento & vbTab & rsLegajos!Cod_Estado & vbTab & rsLegajos!Cod_Nro_Caja & vbTab & vbTab & "Orden: " & rsLegajos!COD_DOCUMENTACION & "  Pos:" & rsLegajos!Orden & "   Prov: " & rsLegajos!Contenedor_Prov
-            rsLegajos.MoveNext
-        Loop
-End If
-
-
-'    ------------- rearchiv digital -------------
-
-            If ChkRearchivoDigital.value = 1 Then
-                
-                If cboCampo.Text = "CLIENTE_LEGAJO_LETRA" Then
-                    Sql = "  SELECT     DOCUMENTOS_DIGITALES.id ,DOCUMENTOS_DIGITALES.COD_CLIENTE, DOCUMENTOS_DIGITALES.NRO_CAJA, DOCUMENTOS_DIGITALES.COD_ESTADO,LOTE,"
-                    Sql = Sql & " DOCUMENTOS_DIGITALES.LETRA_DESDE , INDICES.DESCRIPCION , IMPRESO,  LOTE, IMAGEN_ORIGEN,NOMBRE"
-                    Sql = Sql & "  FROM         DOCUMENTOS_DIGITALES INNER JOIN"
-                    Sql = Sql & "  DOCUMENTOS_DIGITALES_LOTE ON"
-                    Sql = Sql & " DOCUMENTOS_DIGITALES.FK_DOCUMENTOS_DIGITALES_LOTE = DOCUMENTOS_DIGITALES_LOTE.ID_DOCUMENTOS_DIGITALES_LOTE LEFT OUTER"
-                    Sql = Sql & " Join  INDICES ON DOCUMENTOS_DIGITALES_LOTE.FK_INDICES = INDICES.ID"
-                    Sql = Sql & " WHERE DOCUMENTOS_DIGITALES_LOTE.FK_CLIENTES = " & ctlCliente.Valor
-                    Sql = Sql & " AND DOCUMENTOS_DIGITALES.LETRA_DESDE LIKE '%" & Trim(txtBuscarLegajo) & "%'"
-                
-                Else
-                
-                        Sql = "  SELECT     DOCUMENTOS_DIGITALES.id ,DOCUMENTOS_DIGITALES.COD_CLIENTE, DOCUMENTOS_DIGITALES.NRO_CAJA, DOCUMENTOS_DIGITALES.COD_ESTADO,LOTE,"
-                    Sql = Sql & " DOCUMENTOS_DIGITALES.LETRA_DESDE , INDICES.DESCRIPCION , IMPRESO,  LOTE, IMAGEN_ORIGEN,NOMBRE"
-                    Sql = Sql & "  FROM         DOCUMENTOS_DIGITALES INNER JOIN"
-                    Sql = Sql & "  DOCUMENTOS_DIGITALES_LOTE ON"
-                    Sql = Sql & " DOCUMENTOS_DIGITALES.FK_DOCUMENTOS_DIGITALES_LOTE = DOCUMENTOS_DIGITALES_LOTE.ID_DOCUMENTOS_DIGITALES_LOTE LEFT OUTER"
-                    Sql = Sql & " Join  INDICES ON DOCUMENTOS_DIGITALES_LOTE.FK_INDICES = INDICES.ID"
-                    Sql = Sql & " WHERE DOCUMENTOS_DIGITALES_LOTE.FK_CLIENTES = " & ctlCliente.Valor
-                    Sql = Sql & " AND DOCUMENTOS_DIGITALES.NRO_DESDE IN ( " & txtBuscarLegajo & ")"
-                   End If
-                
-                
-                
-                
-                Set rsLegajos = New ADODB.Recordset
-                rsLegajos.Open Sql, ConActiva, 0, 1
-                Do While Not rsLegajos.EOF
-                    grdResultadoBusqueda.AddItem vbTab & "Rearchivo Digital" & vbTab & rsLegajos!Descripcion & vbTab & rsLegajos!ID & vbTab & rsLegajos!LETRA_DESDE & vbTab & "IMPRESO:" & rsLegajos!Impreso & vbTab & rsLegajos!NRO_CAJA & vbTab & Trim(rsLegajos!Nombre) & vbTab & Trim(rsLegajos!Lote) & " Pos: " & rsLegajos!IMAGEN_ORIGEN
-                    rsLegajos.MoveNext
-                Loop
-            End If
-            
-            txtBuscarLegajo.Text = ""
-    Exit Sub
-salir:
-    MsgBox "Verifique los dato", vbInformation
-    txtBuscarLegajo.Text = ""
+'On Error GoTo salir
+'    Set rslegajos = New ADODB.Recordset
+'    rslegajos.CursorLocation = adUseClient
+'    Dim Sql As String
+'    Dim Filtro As String
+'    Dim detalle As String
+'    Dim Año As String
+'
+'    If CboCampo.Text = "" Then
+'        MsgBox "Ingrese el Campo ", vbInformation
+'        Exit Sub
+'    End If
+'
+'    If IsNull(ctlCliente.Valor) Then
+'        MsgBox "Ingrese el Cliente ", vbInformation
+'        Exit Sub
+'    End If
+'    txtBuscarLegajo = Replace(txtBuscarLegajo, vbCrLf, "")
+'
+'    If Mid(txtBuscarLegajo.Text, Len(txtBuscarLegajo.Text)) = "," Then
+'        txtBuscarLegajo.Text = Mid(txtBuscarLegajo.Text, 1, Len(txtBuscarLegajo.Text) - 1)
+'    End If
+'
+'    Sql = " SELECT  INDICES.DESCRIPCION, LEGAJOS.ID_CLIENTE_LEGAJO, LEGAJOS.CLIENTE_LEGAJO , DESCRIPCION_REMITO , LEGAJOS.NRO_CAJA, LEGAJOS.COD_ESTADO ,NOMBRE  "
+'    Sql = Sql & vbCrLf & " FROM LEGAJOS LEFT OUTER JOIN"
+'    Sql = Sql & vbCrLf & " INDICES ON LEGAJOS.COD_CLIENTE = INDICES.COD_CLIENTE AND LEGAJOS.COD_INDICE = INDICES.INDICE"
+'    Sql = Sql & vbCrLf & " where LEGAJOS.COD_CLIENTE = " & ctlCliente.Valor & " And "
+'    If lblIndice.Caption <> "" Then
+'         Sql = Sql & vbCrLf & " COD_INDICE like '" & lblIndice.Caption & "%' AND "
+'    End If
+'
+'    Select Case CboCampo.Text
+'        Case "ID_CLIENTE_LEGAJO"
+'            Filtro = " ID_CLIENTE_LEGAJO IN (" & txtBuscarLegajo & ")"
+'        Case "CLIENTE_LEGAJO_LETRA"
+'            Filtro = " CLIENTE_LEGAJO like '%" & txtBuscarLegajo & "%'"
+'        Case "CLIENTE_LEGAJO_NUMERO"
+'             Filtro = " NUMERO_LEGAJO_CLIENTE IN (" & txtBuscarLegajo & ")"
+'        Case "NOMBRE"
+'             Filtro = " NOMBRE like '%" & txtBuscarLegajo & "%'"
+'        Case "DESCRIPCION"
+'            Filtro = " DESCRIPCION like '%" & txtBuscarLegajo & "%'"
+'    End Select
+'
+'   Rem TitulosBuscar
+'    Sql = Sql & Filtro
+'        rslegajos.Open Sql, ConActiva, 0, 1
+'
+'If (rslegajos.EOF) Then
+' MsgBox "No exsite el legajo"
+'End If
+'
+'    Do While Not rslegajos.EOF
+'        grdResultadoBusqueda.AddItem grdResultadoBusqueda.Rows & vbTab & "Legajos" & vbTab & rslegajos!Descripcion & vbTab & rslegajos!ID_CLIENTE_LEGAJO & vbTab & Trim(rslegajos!CLIENTE_LEGAJO & "  " & Replace(rslegajos!DESCRIPCION_REMITO, Chr(9), "")) & vbTab & rslegajos!Cod_Estado & vbTab & rslegajos!NRO_CAJA & vbTab & rslegajos!Nombre
+'
+'        rslegajos.MoveNext
+'    Loop
+'
+'    If CboCampo.Text = "ID_CLIENTE_LEGAJO" Then
+'        Exit Sub
+'    End If
+'
+'    ' Referencia
+'
+'If chkReferencias.value = 1 Then
+'    If lblIndice.Caption <> "" Then
+'
+'
+'
+'        Sql = " SELECT COD_CLIENTE, NRO_CAJA, NRO_DESDE, NRO_HASTA,FECHA_DESDE, INDICE "
+'        Sql = Sql & vbCrLf & " From REFERENCIAS "
+'        Sql = Sql & vbCrLf & " WHERE  COD_CLIENTE= " & ctlCliente.Valor & " And "
+'
+'        If lblIndice.Caption <> "" Then
+'             Sql = Sql & vbCrLf & " INDICE like '" & lblIndice.Caption & "%' AND "
+'        End If
+'        If IsNumeric(txtBuscarLegajo.Text) Then
+'            Sql = Sql & vbCrLf & txtBuscarLegajo & "  BETWEEN NRO_DESDE AND NRO_HASTA "
+'
+'               If chkSolicitarAño.value = 1 Then
+'                   Año = InputBox("Ingrese el año de 4 cifras")
+'                    Sql = Sql & vbCrLf & " AND  Year(FECHA_DESDE) = " & Año
+'               End If
+'
+'
+'                Set rslegajos = New ADODB.Recordset
+'                rslegajos.Open Sql, ConActiva, 0, 1
+'                Do While Not rslegajos.EOF
+'
+'                If IsNull(rslegajos!FECHA_DESDE) Then
+'                    detalle = " Nro_desde: " & rslegajos!NRO_DESDE & "   Nro_hasta:" & rslegajos!NRO_HASTA
+'                Else
+'                    detalle = " Nro_desde: " & rslegajos!NRO_DESDE & "   Nro_hasta:" & rslegajos!NRO_HASTA & "  AÑO:" & Format(rslegajos!FECHA_DESDE, "YY")
+'                End If
+'
+'                grdResultadoBusqueda.AddItem vbTab & "Referencias" & vbTab & detalle & vbTab & rslegajos!NRO_CAJA & vbTab & txtBuscarLegajo & vbTab & "rslegajos!Cod_Estado" & vbTab & rslegajos!NRO_CAJA
+'                rslegajos.MoveNext
+'                Loop
+'         Else
+'            MsgBox "No se realizo la busqueda en referencia puesto que no numerico "
+'         End If
+'          Else
+'            MsgBox "No se realizo la busqueda en referencia puesto que se asigno un incice "
+'        End If
+'
+'
+'End If
+'
+'
+'
+'
+'   Rem  ----------- orde de documentacion ----------
+'
+'If chkRearchivoLote.value = 1 Then
+'
+'
+'
+'                If CboCampo.Text = "CLIENTE_LEGAJO_LETRA" Then
+'
+'
+'        Sql = " SELECT COD_DOCUMENTACION, ORDENAR_DOCUMENTACION_DETALLE.ELEMENTO, ORDENAR_DOCUMENTACION_DETALLE.COD_INDICE,"
+'        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE, ORDENAR_DOCUMENTACION_DETALLE.COD_ESTADO,"
+'        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.CONTENEDOR_PROV, INDICES.DESCRIPCION,"
+'        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.Cod_Nro_Caja, Orden"
+'        Sql = Sql & " FROM  ORDENAR_DOCUMENTACION_DETALLE LEFT OUTER JOIN"
+'        Sql = Sql & " INDICES ON ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE = INDICES.COD_CLIENTE AND"
+'        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.Cod_Indice = INDICES.Indice"
+'        Sql = Sql & " WHERE  ORDENAR_DOCUMENTACION_DETALLE.ELEMENTO like '%" & txtBuscarLegajo & "%'"
+'        Sql = Sql & " AND ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE =" & ctlCliente.Valor
+'
+'
+'      Else
+'         Sql = " SELECT COD_DOCUMENTACION, ORDENAR_DOCUMENTACION_DETALLE.ELEMENTO, ORDENAR_DOCUMENTACION_DETALLE.COD_INDICE,"
+'        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE, ORDENAR_DOCUMENTACION_DETALLE.COD_ESTADO,"
+'        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.CONTENEDOR_PROV, INDICES.DESCRIPCION,"
+'        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.Cod_Nro_Caja , ORDEN"
+'        Sql = Sql & " FROM  ORDENAR_DOCUMENTACION_DETALLE LEFT OUTER JOIN"
+'        Sql = Sql & " INDICES ON ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE = INDICES.COD_CLIENTE AND"
+'        Sql = Sql & " ORDENAR_DOCUMENTACION_DETALLE.Cod_Indice = INDICES.Indice"
+'        Sql = Sql & " WHERE  ORDENAR_DOCUMENTACION_DETALLE.ELEMENTO_NUMERO in ( " & Trim(txtBuscarLegajo.Text) & ")"
+'        Sql = Sql & " AND ORDENAR_DOCUMENTACION_DETALLE.COD_CLIENTE =" & ctlCliente.Valor
+'
+'
+'      End If
+'
+'
+'        Set rslegajos = New ADODB.Recordset
+'        rslegajos.Open Sql, ConActiva, 0, 1
+'        Do While Not rslegajos.EOF
+'            grdResultadoBusqueda.AddItem vbTab & "Orden Documentacion" & vbTab & rslegajos!Descripcion & vbTab & rslegajos!COD_DOCUMENTACION & vbTab & rslegajos!Elemento & vbTab & rslegajos!Cod_Estado & vbTab & rslegajos!Cod_Nro_Caja & vbTab & vbTab & "Orden: " & rslegajos!COD_DOCUMENTACION & "  Pos:" & rslegajos!Orden & "   Prov: " & rslegajos!Contenedor_Prov
+'            rslegajos.MoveNext
+'        Loop
+'End If
+'
+'
+''    ------------- rearchiv digital -------------
+'
+'            If ChkRearchivoDigital.value = 1 Then
+'
+'                If CboCampo.Text = "CLIENTE_LEGAJO_LETRA" Then
+'                    Sql = "  SELECT     DOCUMENTOS_DIGITALES.id ,DOCUMENTOS_DIGITALES.COD_CLIENTE, DOCUMENTOS_DIGITALES.NRO_CAJA, DOCUMENTOS_DIGITALES.COD_ESTADO,LOTE,"
+'                    Sql = Sql & " DOCUMENTOS_DIGITALES.LETRA_DESDE , INDICES.DESCRIPCION , IMPRESO,  LOTE, IMAGEN_ORIGEN,NOMBRE"
+'                    Sql = Sql & "  FROM         DOCUMENTOS_DIGITALES INNER JOIN"
+'                    Sql = Sql & "  DOCUMENTOS_DIGITALES_LOTE ON"
+'                    Sql = Sql & " DOCUMENTOS_DIGITALES.FK_DOCUMENTOS_DIGITALES_LOTE = DOCUMENTOS_DIGITALES_LOTE.ID_DOCUMENTOS_DIGITALES_LOTE LEFT OUTER"
+'                    Sql = Sql & " Join  INDICES ON DOCUMENTOS_DIGITALES_LOTE.FK_INDICES = INDICES.ID"
+'                    Sql = Sql & " WHERE DOCUMENTOS_DIGITALES_LOTE.FK_CLIENTES = " & ctlCliente.Valor
+'                    Sql = Sql & " AND DOCUMENTOS_DIGITALES.LETRA_DESDE LIKE '%" & Trim(txtBuscarLegajo) & "%'"
+'
+'                Else
+'
+'                        Sql = "  SELECT     DOCUMENTOS_DIGITALES.id ,DOCUMENTOS_DIGITALES.COD_CLIENTE, DOCUMENTOS_DIGITALES.NRO_CAJA, DOCUMENTOS_DIGITALES.COD_ESTADO,LOTE,"
+'                    Sql = Sql & " DOCUMENTOS_DIGITALES.LETRA_DESDE , INDICES.DESCRIPCION , IMPRESO,  LOTE, IMAGEN_ORIGEN,NOMBRE"
+'                    Sql = Sql & "  FROM         DOCUMENTOS_DIGITALES INNER JOIN"
+'                    Sql = Sql & "  DOCUMENTOS_DIGITALES_LOTE ON"
+'                    Sql = Sql & " DOCUMENTOS_DIGITALES.FK_DOCUMENTOS_DIGITALES_LOTE = DOCUMENTOS_DIGITALES_LOTE.ID_DOCUMENTOS_DIGITALES_LOTE LEFT OUTER"
+'                    Sql = Sql & " Join  INDICES ON DOCUMENTOS_DIGITALES_LOTE.FK_INDICES = INDICES.ID"
+'                    Sql = Sql & " WHERE DOCUMENTOS_DIGITALES_LOTE.FK_CLIENTES = " & ctlCliente.Valor
+'                    Sql = Sql & " AND DOCUMENTOS_DIGITALES.NRO_DESDE IN ( " & txtBuscarLegajo & ")"
+'                   End If
+'
+'
+'
+'
+'                Set rslegajos = New ADODB.Recordset
+'                rslegajos.Open Sql, ConActiva, 0, 1
+'                Do While Not rslegajos.EOF
+'                    grdResultadoBusqueda.AddItem vbTab & "Rearchivo Digital" & vbTab & rslegajos!Descripcion & vbTab & rslegajos!ID & vbTab & rslegajos!LETRA_DESDE & vbTab & "IMPRESO:" & rslegajos!Impreso & vbTab & rslegajos!NRO_CAJA & vbTab & Trim(rslegajos!Nombre) & vbTab & Trim(rslegajos!lote) & " Pos: " & rslegajos!IMAGEN_ORIGEN
+'                    rslegajos.MoveNext
+'                Loop
+'            End If
+'
+'            txtBuscarLegajo.Text = ""
+'    Exit Sub
+'salir:
+'    MsgBox "Verifique los dato", vbInformation
+'    txtBuscarLegajo.Text = ""
     
 End Sub
 
@@ -1740,10 +1746,10 @@ End Sub
 
 Private Sub cmdBuscarRearchivo_Click()
     On Error GoTo salir:
-        Dim Rs As New ADODB.Recordset
+        Dim rs As New ADODB.Recordset
         Dim Sql As String
         Dim i As Integer
-        Rs.CursorLocation = adUseClient
+        rs.CursorLocation = adUseClient
         If grdSeleccionLegajos.Rows < 1 Then
         
             MsgBox "Ingrese legajos a buscar"
@@ -1762,8 +1768,8 @@ Private Sub cmdBuscarRearchivo_Click()
               Sql = Sql & vbCrLf & "  OR ( COD_CLIENTE =" & grdSeleccionLegajos.TextMatrix(i, 1) & " AND ORDEN_LEGAJOS_DETALLE.COD_ID_CLIENTE_LEGAJO =" & grdSeleccionLegajos.TextMatrix(i, 2) & "  )  "
         Next
         Sql = Sql & vbCrLf & " )  ORDER BY COD_CLIENTE,COD_ID_CLIENTE_LEGAJO  , ORDEN_LEGAJOS.ID_ORDEN_LEGAJO"
-        Rs.Open Sql, ConActiva, adOpenDynamic, adLockOptimistic
-        DATOSGRILLA grdRearchivo, Rs
+        rs.Open Sql, ConActiva, adOpenDynamic, adLockOptimistic
+        DATOSGRILLA grdRearchivo, rs
         MousePointer = 0
         MsgBox "Operación terminada", vbInformation
         
@@ -1817,13 +1823,13 @@ End Sub
 Private Sub cmdControlOrden_Click()
 Dim Sql As String
 Dim Afect As Integer
-    If TxtOrden.Text = "" Then
+    If txtOrden.Text = "" Then
         MsgBox "Ingrese la orden"
         Exit Sub
 
     End If
     Sql = " Update ORDEN_LEGAJOS SET COD_ESTADO = 4 "
-    Sql = Sql & " Where COD_ESTADO = 2 and (ID_ORDEN_LEGAJO = " & TxtOrden.Text & " )"
+    Sql = Sql & " Where COD_ESTADO = 2 and (ID_ORDEN_LEGAJO = " & txtOrden.Text & " )"
      Afect = ExecutarSql(Sql)
     If Afect > 0 Then
         MsgBox "La acutalizacion se realizo con exito", vbInformation
@@ -1838,9 +1844,9 @@ End Sub
 
 Private Sub cmdEntrada_Click()
 Dim FechaEntrada As String
-Dim Lote As Long
+Dim lote As Long
 Dim Sql As String
-Dim Rs As ADODB.Recordset
+Dim rs As ADODB.Recordset
 Dim Valor As String
 
 
@@ -1850,27 +1856,27 @@ If IsNull(ctlCliente.Valor) Then
 End If
 
 FechaEntrada = InputBox("Ingrese la fecha de entrada", "Fecha", Format(Now, "DD/MM/YYYY"))
-Lote = InputBox("Ingrese el N de lote el 0 toma solo la fecha", "Lote", "0")
+lote = InputBox("Ingrese el N de lote el 0 toma solo la fecha", "Lote", "0")
 Sql = " SELECT     ELEMENTO, TIPO, COD_CLIENTE"
 Sql = Sql & " From ENTRADA"
 Sql = Sql & "  Where TIPO = 3"
 Sql = Sql & "  AND COD_CLIENTE =" & ctlCliente.Valor
 Sql = Sql & "  AND FECHA =" & FechaFormato(FechaEntrada)
-If Lote <> 0 Then
-    Sql = Sql & "  AND lote = " & Lote
+If lote <> 0 Then
+    Sql = Sql & "  AND lote = " & lote
 End If
 
 Sql = Sql & "  ORDER BY ELEMENTO"
 
-Set Rs = New ADODB.Recordset
+Set rs = New ADODB.Recordset
 
-Rs.Open Sql, ConActiva, 0, 1
+rs.Open Sql, ConActiva, 0, 1
 
-Do While Not Rs.EOF
+Do While Not rs.EOF
     
-    Valor = Valor & Rs!Elemento & ","
+    Valor = Valor & rs!Elemento & ","
     
-    Rs.MoveNext
+    rs.MoveNext
     
 Loop
 Clipboard.Clear
@@ -1909,11 +1915,11 @@ Private Sub cmdInsertarBusqueda_Click()
         Dim i As Integer
         Dim ID_LOTE_BUSQUEDA, TIPO, fecha, COD_CLIENTE, NRO_CAJA, Legajo, Descripcion As String
         Dim MaxLote As Integer
-        Dim Rs As New ADODB.Recordset
+        Dim rs As New ADODB.Recordset
         
         
-        Rs.Open " SELECT MAX(ID_LOTE_BUSQUEDA) AS maxLote From TEM_BUSQUEDA", ConActiva, 0, 1
-        ID_LOTE_BUSQUEDA = Rs!MaxLote + 1
+        rs.Open " SELECT MAX(ID_LOTE_BUSQUEDA) AS maxLote From TEM_BUSQUEDA", ConActiva, 0, 1
+        ID_LOTE_BUSQUEDA = rs!MaxLote + 1
         
         For i = 1 To grdVarios.Rows - 1
             
@@ -1944,16 +1950,16 @@ Private Sub cmdInsertarBusqueda_Click()
 End Sub
 
 Private Sub cmdLecturaLegajo_Click()
-    Dim Rs As New ADODB.Recordset
+    Dim rs As New ADODB.Recordset
     Dim MaxLectura As Long
     
     Dim Sql As String
     Dim i As Integer
     
-    Rs.Open "SELECT     MAX(ID_Lectura_Legajo) AS MaxLectura FROM         LECTURA_LEGAJO", ConActiva, 0, 1
+    rs.Open "SELECT     MAX(ID_Lectura_Legajo) AS MaxLectura FROM         LECTURA_LEGAJO", ConActiva, 0, 1
     
     
-    MaxLectura = Rs!MaxLectura + 1
+    MaxLectura = rs!MaxLectura + 1
     
     
     If grdSeleccionLegajos.Rows = 2 Then
@@ -1998,23 +2004,23 @@ Dim Afect As Integer
     End If
 
 Sql = " Update ORDEN_LEGAJOS SET COD_ESTADO = 2, RESPONSABLE_ORDEN = " & ctlPersonal.Valor & ",fecha_orden = " & FechaFormato(txtFechaOrden.Text)
-Sql = Sql & " Where (ID_ORDEN_LEGAJO = " & TxtOrden.Text & " ) And (Cod_Estado = 0)"
+Sql = Sql & " Where (ID_ORDEN_LEGAJO = " & txtOrden.Text & " ) And (Cod_Estado = 0)"
 ExecutarSql Sql
-    Sql = " Update ORDEN_LEGAJOS_DETALLE Set COD_ESTADO_DETALLE = 2 Where COD_ESTADO_DETALLE = 0 AND COD_ORDEN_LEGAJO = " & TxtOrden.Text
+    Sql = " Update ORDEN_LEGAJOS_DETALLE Set COD_ESTADO_DETALLE = 2 Where COD_ESTADO_DETALLE = 0 AND COD_ORDEN_LEGAJO = " & txtOrden.Text
      Afect = ExecutarSql(Sql)
         If Afect > 0 Then
-            Dim Rs As ADODB.Recordset
-            Dim cantidad As Integer
+            Dim rs As ADODB.Recordset
+            Dim Cantidad As Integer
             Dim Cliente As Integer
-            Set Rs = New ADODB.Recordset
-            Rs.Open "SELECT COUNT(*) AS CANTIDAD FROM ORDEN_LEGAJOS_DETALLE WHERE COD_ORDEN_LEGAJO = " & TxtOrden.Text, ConActiva, 0, 1
-            cantidad = Rs!cantidad
-            Set Rs = New ADODB.Recordset
-            Rs.Open "SELECT COD_CLIENTE FROM ORDEN_LEGAJOS WHERE ID_ORDEN_LEGAJO = " & TxtOrden.Text, ConActiva, 0, 1
-            Cliente = Rs!COD_CLIENTE
-        If Not Rs.EOF Then
-            InsertarProducion ctlPersonal.Valor, 11, "Orden legajo:" & TxtOrden.Text, cantidad, Cliente
-            TxtOrden.Text = ""
+            Set rs = New ADODB.Recordset
+            rs.Open "SELECT COUNT(*) AS CANTIDAD FROM ORDEN_LEGAJOS_DETALLE WHERE COD_ORDEN_LEGAJO = " & txtOrden.Text, ConActiva, 0, 1
+            Cantidad = rs!Cantidad
+            Set rs = New ADODB.Recordset
+            rs.Open "SELECT COD_CLIENTE FROM ORDEN_LEGAJOS WHERE ID_ORDEN_LEGAJO = " & txtOrden.Text, ConActiva, 0, 1
+            Cliente = rs!COD_CLIENTE
+        If Not rs.EOF Then
+            InsertarProducion ctlPersonal.Valor, 11, "Orden legajo:" & txtOrden.Text, Cantidad, Cliente
+            txtOrden.Text = ""
         Else
             MsgBox "No se relizo la actualizacion", vbInformation
         End If
@@ -2049,8 +2055,8 @@ Private Sub cmdOrdenesPendientesControl_Click()
 End Sub
 
 Private Sub cmdOrdenLegajos_Click()
-    Dim Rs As ADODB.Recordset
-    Set Rs = New ADODB.Recordset
+    Dim rs As ADODB.Recordset
+    Set rs = New ADODB.Recordset
     Dim Sql As String
     Dim MaxOrden As Integer
     Dim i As Integer
@@ -2086,8 +2092,8 @@ End If
            
            
            MousePointer = 11
-           Rs.Open "Select max(ID_ORDEN_LEGAJO) as maxid from orden_legajos ", ConActiva, 0, 1
-           MaxOrden = Rs!MaxID + 1
+           rs.Open "Select max(ID_ORDEN_LEGAJO) as maxid from orden_legajos ", ConActiva, 0, 1
+           MaxOrden = rs!MaxID + 1
            
            
            With grdSeleccionLegajos
@@ -2299,7 +2305,7 @@ With grdResultadoBusqueda
     .ColAlignment(7) = 0
     .ColAlignment(8) = 0
  
-    .ColWidth(0) = 100
+    .ColWidth(0) = 400
     .ColWidth(1) = 2000
     .ColWidth(2) = 3500
     .ColWidth(3) = 1000
@@ -2574,6 +2580,7 @@ Private Sub txtLecturaLegajos_KeyPress(KeyAscii As Integer)
                         Exit Sub
                     End If
                     txtBuscarLegajo = txtBuscarLegajo & CLng(Mid(txtLecturaLegajos, 6, 6)) & ","
+                    BuscarLegajosRearchivo ctlCliente.Valor, txtBuscarLegajo.Text
                     KeyAscii = 0
                 End If
                 If UCase(Mid(txtLecturaLegajos.Text, 1, 2)) = "L2" Then
@@ -2585,6 +2592,7 @@ Private Sub txtLecturaLegajos_KeyPress(KeyAscii As Integer)
                         Exit Sub
                     End If
                     txtBuscarLegajo = txtBuscarLegajo & CLng(Mid(txtLecturaLegajos, 3)) & ","
+                    BuscarLegajosRearchivo ctlCliente.Valor, txtBuscarLegajo.Text
                     KeyAscii = 0
                 End If
                 If UCase(Mid(txtLecturaLegajos.Text, 1, 2)) = "12" And Len(txtLecturaLegajos.Text) = 12 Then
@@ -2596,6 +2604,7 @@ Private Sub txtLecturaLegajos_KeyPress(KeyAscii As Integer)
                         Exit Sub
                     End If
                     txtBuscarLegajo = txtBuscarLegajo & CLng(Mid(txtLecturaLegajos, 3)) & ","
+                    BuscarLegajosRearchivo ctlCliente.Valor, txtBuscarLegajo.Text
                     KeyAscii = 0
                 End If
                 
@@ -2603,11 +2612,12 @@ Private Sub txtLecturaLegajos_KeyPress(KeyAscii As Integer)
                     Etiqueta = CLng(Mid(txtLecturaLegajos, 3, 10))
                     Cliente = ctlCliente.Valor
                     If BuscarID_legajo(Etiqueta, Cliente) = 0 Then
-                        MsgBox "EL CLIENTE NO ES EL MISMO", vbCritical
+                        MsgBox "No Existe el legajo Montemar", vbCritical
                         txtLecturaLegajos.Text = ""
                         Exit Sub
                     End If
                     txtBuscarLegajo = txtBuscarLegajo & Etiqueta & ","
+                    BuscarLegajosRearchivo ctlCliente.Valor, txtBuscarLegajo.Text
                     KeyAscii = 0
                 End If
                 
@@ -2641,7 +2651,7 @@ End Sub
 
 Public Function ControlCajasRearchivo(Caja As Long, DIGITO As Integer) As Boolean
     ControlCajasRearchivo = True
-    Dim Rs As New ADODB.Recordset
+    Dim rs As New ADODB.Recordset
     Dim Sql As String
 
         
@@ -2651,14 +2661,14 @@ Public Function ControlCajasRearchivo(Caja As Long, DIGITO As Integer) As Boolea
         Sql = Sql & " Where CONTENEDOR.NRO_CAJA = " & Caja
         Sql = Sql & " and COD_CLIENTE =291"
         
-        Rs.Open Sql, strConBasa
+        rs.Open Sql, strConBasa
 
-        If Not Rs.EOF Then
-            If Rs!estado <> 2 Then
+        If Not rs.EOF Then
+            If rs!estado <> 2 Then
              MsgBox "Estado incorrecto"
              ControlCajasRearchivo = False
              Else
-             If Rs!Digito_Verificador <> DIGITO Then
+             If rs!Digito_Verificador <> DIGITO Then
                      MsgBox "Digito Incorrecto"
                     ControlCajasRearchivo = False
              Else
@@ -2675,3 +2685,38 @@ Public Function ControlCajasRearchivo(Caja As Long, DIGITO As Integer) As Boolea
         End If
 
 End Function
+
+
+
+Public Sub BuscarLegajosRearchivo(COD_CLIENTE As Integer, ID_CLIENTE_LEGAJO As Long)
+On Error GoTo salir
+    Set rslegajos = New ADODB.Recordset
+    rslegajos.CursorLocation = adUseClient
+    Dim Sql As String
+    If Mid(txtBuscarLegajo.Text, Len(txtBuscarLegajo.Text)) = "," Then
+        txtBuscarLegajo.Text = Mid(txtBuscarLegajo.Text, 1, Len(txtBuscarLegajo.Text) - 1)
+    End If
+    Sql = " SELECT  INDICES.DESCRIPCION, LEGAJOS.ID_CLIENTE_LEGAJO, LEGAJOS.CLIENTE_LEGAJO , DESCRIPCION_REMITO , LEGAJOS.NRO_CAJA, LEGAJOS.COD_ESTADO ,NOMBRE  "
+    Sql = Sql & vbCrLf & " FROM LEGAJOS LEFT OUTER JOIN"
+    Sql = Sql & vbCrLf & " INDICES ON LEGAJOS.COD_CLIENTE = INDICES.COD_CLIENTE AND LEGAJOS.COD_INDICE = INDICES.INDICE"
+    Sql = Sql & vbCrLf & " where LEGAJOS.COD_CLIENTE = " & COD_CLIENTE & " And "
+    Sql = Sql & vbCrLf & " ID_CLIENTE_LEGAJO =  (" & ID_CLIENTE_LEGAJO & ")"
+    
+    rslegajos.Open Sql, ConActiva, 0, 1
+    If (rslegajos.EOF) Then
+        MsgBox "No exsite el legajo"
+        Sql = " Insert Into MONTEMAR_CONTROL_2020(COD_CLIENTE, ID_CLIENTE_LEGAJO)"
+        Sql = Sql & vbCrLf & "  VALUES (" & COD_CLIENTE & "," & ID_CLIENTE_LEGAJO & ")"
+        ExecutarSql Sql
+         txtBuscarLegajo.Text = ""
+    End If
+    Do While Not rslegajos.EOF
+        txtBuscarLegajo.Text = ""
+        grdResultadoBusqueda.AddItem grdResultadoBusqueda.Rows & vbTab & "Legajos" & vbTab & rslegajos!Descripcion & vbTab & rslegajos!ID_CLIENTE_LEGAJO & vbTab & Trim(rslegajos!CLIENTE_LEGAJO & "  " & Replace(rslegajos!DESCRIPCION_REMITO, Chr(9), "")) & vbTab & rslegajos!Cod_Estado & vbTab & rslegajos!NRO_CAJA & vbTab & rslegajos!Nombre
+        rslegajos.MoveNext
+    Loop
+    Exit Sub
+salir:
+    MsgBox "Verifique los dato", vbInformation
+    txtBuscarLegajo.Text = ""
+End Sub
