@@ -1,10 +1,10 @@
 VERSION 5.00
 Object = "{BDDD132C-614B-11D3-B85E-85ADB7D07209}#1.0#0"; "dXSBar.dll"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.2#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.MDIForm MDIfrmInicio 
    AutoShowChildren=   0   'False
    BackColor       =   &H00FFFFFF&
-   Caption         =   "BIENVENIDOS A SISTEMA BASA"
+   Caption         =   "MONTEMAR"
    ClientHeight    =   9165
    ClientLeft      =   1560
    ClientTop       =   810
@@ -50,7 +50,7 @@ Begin VB.MDIForm MDIfrmInicio
       Align           =   3  'Align Left
       Height          =   8790
       Left            =   0
-      OleObjectBlob   =   "MDIfrmInicio.frx":2C5114
+      OleObjectBlob   =   "MDIfrmInicio.frx":0614
       TabIndex        =   0
       Top             =   0
       Width           =   2175
